@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div>
+    <div class="mb-11">
+        <div class="flex flex-col">
             <label for="firstPerson">First Adress: </label>
-            <input id="firstPerson" v-model="firstPerson" type="text">
+            <input class="w-full border-2 border-black rounded-md" id="firstPerson" v-model="firstPerson" type="text">
         </div>
-        <div>
+        <div class="flex flex-col">
             <label for="secondPerson">Second Adress: </label>
-            <input id="secondPerson" v-model="secondPerson" type="text">
+            <input class="w-full border-2 border-black rounded-md" id="secondPerson" v-model="secondPerson" type="text">
         </div>
     </div>
 </template>

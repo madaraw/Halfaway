@@ -1,12 +1,11 @@
 
 <template>
-  <div id="map">
+  <div class="h-[500px]" id="map">
   </div>
 </template>
 
 
 <script setup>
-  /* eslint-disable */
   import { onMounted, ref } from 'vue'
   import { Loader } from "@googlemaps/js-api-loader"
 
@@ -27,9 +26,3 @@
     });
   })
 </script>
-
-<style>
-#map {
-  height: 500px;
-}
-</style>
