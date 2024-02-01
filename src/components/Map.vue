@@ -11,8 +11,9 @@
 
   const map = ref()
   onMounted(() => {
+    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
     const loader = new Loader({
-      apiKey: "AIzaSyDiNB6iFozzwqoJA9kBQL-0H_U6-szVOW4",
+      apiKey: apiKey,
       version: "weekly",
     });
     let googlemaps
