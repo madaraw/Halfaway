@@ -10,9 +10,9 @@
   import { Loader } from "@googlemaps/js-api-loader"
 
   const map = ref(null)
-  const placeMarkers = (info1, info2) => {
-    createMarker(info1.places[0].location)
-    createMarker(info2.places[0].location)
+  const placeMarkers = (places) => {
+    createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
+    createMarker(places.secondField.geometry ? places.secondField.geometry.location.toJSON() : { lat: places.secondField.location.latitude, lng: places.secondField.location.longitude })
   }
   let createMarker = null
   defineExpose({ placeMarkers })
@@ -38,7 +38,7 @@
       });
       createMarker = (position) => {
         return new google.maps.Marker({
-          position: { lat: position.latitude, lng: position.longitude },
+          position,
           map: map.value,
         })
       }
