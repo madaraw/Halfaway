@@ -5,14 +5,19 @@
     import Results from './Results.vue'
 
     const getPlaces = async (places) => {
-        if (!places[0] && !places[1]) return
-        const positions = await checkPosition(...places)
-        console.log("positions", positions)
-        map.value.placeMarkers(...positions)
+        if (!places.firstField.geometry) {
+            const firstPlace = await fetchPlace(places.firstField)
+            places.firstField = firstPlace.places[0]
+        }
+        if (!places.secondField.geometry) {
+            const secondPlace = await fetchPlace(places.secondField)
+            places.secondField = secondPlace.places[0]
+        }
+        map.value.placeMarkers(places)
     }
     const map = ref(null)
     const fetchPlace = async (query) => {
-        return await fetch(`https://places.googleapis.com/v1/places:searchText`, {
+        const res = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,6 +28,7 @@
                 'textQuery': query
             })
         })
+        return await res.json()
     }
     const checkPosition = async (field1, field2) => {
         const places = await Promise.all([fetchPlace(field1), fetchPlace(field2)])
