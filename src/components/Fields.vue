@@ -58,3 +58,16 @@
         })
     })
 </script>
+<style>
+.pac-icon {
+    @apply hidden
+}
+
+.pac-item {
+    @apply font-sans font-medium text-sm text-black py-1 px-2
+}
+
+.pac-item-query {
+    @apply font-sans text-sm
+}
+</style>
