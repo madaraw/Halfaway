@@ -12,7 +12,7 @@
   const props = defineProps(['center'])
   const map = ref(null)
   const placeMarkers = (places, middleLatLng) => {
-    createMarker(middleLatLng)
+    createMarker(middleLatLng, true)
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
     createMarker(places.secondField.geometry ? places.secondField.geometry.location.toJSON() : { lat: places.secondField.location.latitude, lng: places.secondField.location.longitude })
   }
@@ -27,15 +27,27 @@
     });
     loader.load().then(async () => {
       const { Map } = await google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
-      map.value = new Map(document.getElementById("map"), {
+      const myMap = new Map(document.getElementById("map"), {
         center: centerCoords,
         zoom: 10,
+        mapId: '99912853fe0a81f5'
       });
-      createMarker = (position) => {
-        return new google.maps.Marker({
+      map.value = myMap
+      createMarker = (position, middleMap = false) => {
+        let pinBackground = new PinElement({
+          background: "#0542fa",
+          borderColor: "#4205fa",
+          glyphColor: "#4205fa"
+        })
+        return middleMap ? new AdvancedMarkerElement({
           position,
-          map: map.value,
+          content: pinBackground.element,
+          map: myMap,
+        }) : new AdvancedMarkerElement({
+          position,
+          map: myMap,
         })
       }
     });
