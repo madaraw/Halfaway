@@ -1,4 +1,8 @@
 <template>
+    <div v-if="results.places" v-for="place in results.places" :key="place.id">
+        <h1>{{ place.displayName.text }}</h1><span>{{ place.rating }}</span>
+        <p v-if="place.currentOpeningHours">open? {{ place.currentOpeningHours.openNow ? "yes" : "no" }}</p>
+    </div>
     <div>
         <h2 class="text-xl font-semibold">Simple Text</h2>
         <p>Simple description: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat cumque id eveniet tempora
@@ -6,4 +10,10 @@
             expedita deleniti?</p>
     </div>
 </template>
-<script></script>
+<script setup>
+    import { onMounted } from 'vue'
+    const props = defineProps(["results"])
+    onMounted(() => {
+        console.log(props.results.places[6].currentOpeningHours.openNow)
+    })
+</script>
