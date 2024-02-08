@@ -22,7 +22,7 @@
     const secondFieldInput = ref('')
     const autocompleteField1 = ref(null)
     const autocompleteField2 = ref(null)
-    // $emit('sendPlaces', [firstFieldInput, secondFieldInput])
+    const props = defineProps(["country"])
     const emit = defineEmits(["sendPlaces"])
     const gettheplace = () => {
         const payload = {}
@@ -43,18 +43,19 @@
         emit('sendPlaces', payload)
     }
     onMounted(() => {
+        let country = props.country.toLowerCase()
         const loader = new Loader({
             apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
             version: "weekly",
         });
         loader.load().then(async () => {
             const { Autocomplete } = await google.maps.importLibrary('places')
-            autocompleteField1.value = new Autocomplete(document.getElementById('firstFieldInput'))
-            autocompleteField2.value = new Autocomplete(document.getElementById('secondFieldInput'))
-            google.maps.event.addListener(autocompleteField1.value, 'place_changed', (e) => {
-                console.log("enterd", e)
+            autocompleteField1.value = new Autocomplete(document.getElementById('firstFieldInput'), {
+                componentRestrictions: { country }
             })
-            // console.log(autocompleteField1)
+            autocompleteField2.value = new Autocomplete(document.getElementById('secondFieldInput'), {
+                componentRestrictions: { country }
+            })
         })
     })
 </script>

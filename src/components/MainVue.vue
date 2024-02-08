@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import Fields from './Fields.vue'
     import Map from './Map.vue'
     import Results from './Results.vue'
@@ -16,6 +16,7 @@
         map.value.placeMarkers(places)
     }
     const map = ref(null)
+    const country = ref(null)
     const fetchPlace = async (query) => {
         const res = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
             method: 'POST',
@@ -30,15 +31,16 @@
         })
         return await res.json()
     }
-    const checkPosition = async (field1, field2) => {
-        const places = await Promise.all([fetchPlace(field1), fetchPlace(field2)])
-        return await Promise.all([places[0].json(), places[1].json()])
-    }
+    onMounted(async () => {
+        let res = await fetch('http://ipinfo.io/json?token=d7e1be900b762e')
+        const ipGeo = await res.json()
+        country.value = ipGeo.country
+    })
 </script>
 
 <template>
     <div class="container mx-auto py-10 px-2 space-y-4">
-        <Fields @send-Places="getPlaces" />
+        <Fields v-if="country" @send-Places="getPlaces" :country="country" />
         <Map ref="map" />
         <Results />
     </div>
