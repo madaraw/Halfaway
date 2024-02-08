@@ -16,6 +16,7 @@
         map.value.placeMarkers(places)
     }
     const map = ref(null)
+    const centerCoords = ref(null)
     const country = ref(null)
     const fetchPlace = async (query) => {
         const res = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
@@ -35,13 +36,19 @@
         let res = await fetch('http://ipinfo.io/json?token=d7e1be900b762e')
         const ipGeo = await res.json()
         country.value = ipGeo.country
+        centerCoords.value = { lat: +ipGeo.loc.split(",")[0], lng: +ipGeo.loc.split(",")[1] }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                centerCoords.value = { lat: position.coords.latitude, lng: position.coords.longitude }
+            })
+        }
     })
 </script>
 
 <template>
     <div class="container mx-auto py-10 px-2 space-y-4">
         <Fields v-if="country" @send-Places="getPlaces" :country="country" />
-        <Map ref="map" />
+        <Map v-if="centerCoords" ref="map" :center="centerCoords" />
         <Results />
     </div>
 </template>

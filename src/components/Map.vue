@@ -9,6 +9,7 @@
   import { onMounted, ref } from 'vue'
   import { Loader } from "@googlemaps/js-api-loader"
 
+  const props = defineProps(['center'])
   const map = ref(null)
   const placeMarkers = (places) => {
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
@@ -17,13 +18,7 @@
   let createMarker = null
   defineExpose({ placeMarkers })
   onMounted(() => {
-    let centerCoords
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        centerCoords = { lat: position.coords.latitude, lng: position.coords.longitude }
-      })
-      console.log("", map.value)
-    }
+    let centerCoords = props.center
     const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
     const loader = new Loader({
       apiKey: apiKey,
