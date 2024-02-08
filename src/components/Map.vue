@@ -11,7 +11,8 @@
 
   const props = defineProps(['center'])
   const map = ref(null)
-  const placeMarkers = (places) => {
+  const placeMarkers = (places, middleLatLng) => {
+    createMarker(middleLatLng)
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
     createMarker(places.secondField.geometry ? places.secondField.geometry.location.toJSON() : { lat: places.secondField.location.latitude, lng: places.secondField.location.longitude })
   }

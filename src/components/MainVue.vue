@@ -13,7 +13,52 @@
             const secondPlace = await fetchPlace(places.secondField)
             places.secondField = secondPlace.places[0]
         }
-        map.value.placeMarkers(places)
+        map.value.placeMarkers(places, getLatLng(places).midleLatLng)
+    }
+    const getLatLng = (places) => {
+        const latLngs = {
+            first: places.firstField.geometry ? places.firstField.geometry.location.toJSON() : {
+                lat: places.firstField.location.latitude,
+                lng: places.firstField.location.longitude
+            },
+            second: places.secondField.geometry ? places.secondField.geometry.location.toJSON() : {
+                lat: places.secondField.location.latitude,
+                lng: places.secondField.location.longitude
+            }
+        }
+        return {
+            firstLatLng: latLngs.first,
+            secondLatLng: latLngs.second,
+            midleLatLng: {
+                lat: (latLngs.first.lat + latLngs.second.lat) / 2,
+                lng: (latLngs.first.lng + latLngs.second.lng) / 2
+            }
+        }
+    }
+    const getMiddleSearch = async (location) => {
+        const res = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': import.meta.env.VITE_GOOGLE_API_KEY,
+                'X-Goog-FieldMask': '*'
+            },
+            body: JSON.stringify({
+                'includedTypes': [
+                    'coffee_shop', 'cafe'
+                ],
+                'locationRestriction': {
+                    'circle': {
+                        'center': {
+                            'latitude': location.lat,
+                            'longitude': location.lng
+                        },
+                        'radius': 500
+                    }
+                }
+            })
+        });
+        return await res.json()
     }
     const map = ref(null)
     const centerCoords = ref(null)
