@@ -13,10 +13,11 @@
   const map = ref(null)
   const placeMarkers = (places, middleLatLng) => {
     createMarker(middleLatLng, true)
+    createCircle(middleLatLng)
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
     createMarker(places.secondField.geometry ? places.secondField.geometry.location.toJSON() : { lat: places.secondField.location.latitude, lng: places.secondField.location.longitude })
   }
-  let createMarker = null
+  let createMarker = null, createCircle = null
   defineExpose({ placeMarkers })
   onMounted(() => {
     let centerCoords = props.center
@@ -49,6 +50,18 @@
           position,
           map: myMap,
         })
+      }
+      createCircle = (middleLatLng) => {
+        return new google.maps.Circle({
+          strokeColor: "#FF0000",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#FF0000",
+          fillOpacity: 0.35,
+          myMap,
+          center: middleLatLng,
+          radius: 500,
+        });
       }
     });
   })
