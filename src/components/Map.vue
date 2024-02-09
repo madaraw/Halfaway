@@ -32,7 +32,7 @@
       const myMap = new Map(document.getElementById("map"), {
         center: centerCoords,
         zoom: 10,
-        mapId: '99912853fe0a81f5'
+        mapId: import.meta.env.VITE_GOOGLE_MAP_ID
       });
       map.value = myMap
       createMarker = (position, middleMap = false) => {
