@@ -1,13 +1,13 @@
 <script setup>
     import { useNearbyInfosStore } from '../stores/nearbyInfos'
     import { onMounted, ref } from 'vue';
+    import { fetchPlace, getIpGeo } from '../composables/mapsApiCalls';
     import Fields from './Fields.vue'
     import Map from './Map.vue'
     import Results from './Results.vue'
 
     const nearbyInfosStore = useNearbyInfosStore()
     const types = ref([])
-    const middleSearchResults = ref(null)
     const getPlaces = async (places) => {
         if (places.coffeeShops)
             types.value.push(...['coffee_shop', 'cafe'])
@@ -45,49 +45,11 @@
             }
         }
     }
-    const getMiddleSearch = async (location) => {
-        const res = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': import.meta.env.VITE_GOOGLE_API_KEY,
-                'X-Goog-FieldMask': '*'
-            },
-            body: JSON.stringify({
-                'includedTypes': types.value,
-                'locationRestriction': {
-                    'circle': {
-                        'center': {
-                            'latitude': location.lat,
-                            'longitude': location.lng
-                        },
-                        'radius': 500
-                    }
-                }
-            })
-        });
-        return await res.json()
-    }
     const map = ref(null)
     const centerCoords = ref(null)
     const country = ref(null)
-    const fetchPlace = async (query) => {
-        const res = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': import.meta.env.VITE_GOOGLE_API_KEY,
-                'X-Goog-FieldMask': 'places.displayName,places.addressComponents,places.location'
-            },
-            body: JSON.stringify({
-                'textQuery': query
-            })
-        })
-        return await res.json()
-    }
     onMounted(async () => {
-        let res = await fetch('http://ipinfo.io/json?token=d7e1be900b762e')
-        const ipGeo = await res.json()
+        const ipGeo = await getIpGeo()
         country.value = ipGeo.country
         centerCoords.value = { lat: +ipGeo.loc.split(",")[0], lng: +ipGeo.loc.split(",")[1] }
         if (navigator.geolocation) {
