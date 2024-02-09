@@ -4,8 +4,14 @@
     import Map from './Map.vue'
     import Results from './Results.vue'
 
+    const types = ref([])
     const middleSearchResults = ref(null)
     const getPlaces = async (places) => {
+        if (places.coffeeShops)
+            types.value.push(...['coffee_shop', 'cafe'])
+        if (places.restaurants)
+            types.value.push('restaurant')
+        console.log(types.value)
         if (!places.firstField.geometry) {
             const firstPlace = await fetchPlace(places.firstField)
             places.firstField = firstPlace.places[0]
@@ -46,9 +52,7 @@
                 'X-Goog-FieldMask': '*'
             },
             body: JSON.stringify({
-                'includedTypes': [
-                    'coffee_shop', 'cafe'
-                ],
+                'includedTypes': types.value,
                 'locationRestriction': {
                     'circle': {
                         'center': {
