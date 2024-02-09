@@ -1,5 +1,5 @@
 <template>
-    <div v-if="results.places" v-for="place in results.places" :key="place.id">
+    <div v-if="nearbyInfosStore.nearbyInfo.places" v-for="place in nearbyInfosStore.nearbyInfo.places" :key="place.id">
         <h1>{{ place.displayName.text }}</h1><span>{{ place.rating }}</span>
         <p v-if="place.currentOpeningHours">open? {{ place.currentOpeningHours.openNow ? "yes" : "no" }}</p>
     </div>
@@ -11,9 +11,6 @@
     </div>
 </template>
 <script setup>
-    import { onMounted } from 'vue'
-    const props = defineProps(["results"])
-    onMounted(() => {
-        console.log(props.results.places[6].currentOpeningHours.openNow)
-    })
+    import { useNearbyInfosStore } from '../stores/nearbyInfos';
+    const nearbyInfosStore = useNearbyInfosStore()
 </script>

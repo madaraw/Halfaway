@@ -1,9 +1,11 @@
 <script setup>
+    import { useNearbyInfosStore } from '../stores/nearbyInfos'
     import { onMounted, ref } from 'vue';
     import Fields from './Fields.vue'
     import Map from './Map.vue'
     import Results from './Results.vue'
 
+    const nearbyInfosStore = useNearbyInfosStore()
     const types = ref([])
     const middleSearchResults = ref(null)
     const getPlaces = async (places) => {
@@ -20,7 +22,7 @@
             const secondPlace = await fetchPlace(places.secondField)
             places.secondField = secondPlace.places[0]
         }
-        middleSearchResults.value = await getMiddleSearch(getLatLng(places).midleLatLng)
+        await nearbyInfosStore.getNearbyInfo(getLatLng(places).midleLatLng, types.value)
         map.value.placeMarkers(places, getLatLng(places).midleLatLng)
     }
     const getLatLng = (places) => {
@@ -100,6 +102,6 @@
     <div class="container mx-auto py-10 px-2 space-y-4">
         <Fields v-if="country" @send-Places="getPlaces" :country="country" />
         <Map v-if="centerCoords" ref="map" :center="centerCoords" />
-        <Results v-if="middleSearchResults" :results="middleSearchResults" />
+        <Results />
     </div>
 </template>
