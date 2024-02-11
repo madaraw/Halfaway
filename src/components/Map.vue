@@ -14,10 +14,11 @@
   const placeMarkers = (places, middleLatLng) => {
     createMarker(middleLatLng, true)
     createCircle(middleLatLng)
+    panTheMap(middleLatLng)
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
     createMarker(places.secondField.geometry ? places.secondField.geometry.location.toJSON() : { lat: places.secondField.location.latitude, lng: places.secondField.location.longitude })
   }
-  let createMarker = null, createCircle = null
+  let createMarker = null, createCircle = null, panTheMap = null
   defineExpose({ placeMarkers })
   onMounted(() => {
     let centerCoords = props.center
@@ -33,6 +34,7 @@
       const myMap = new Map(document.getElementById("map"), {
         center: centerCoords,
         zoom: 10,
+        disableDefaultUI: true,
         mapId: import.meta.env.VITE_GOOGLE_MAP_ID
       });
       map.value = myMap
@@ -62,6 +64,10 @@
           center: middleLatLng,
           radius: 500,
         });
+      }
+      panTheMap = (panLatLng) => {
+        myMap.panTo(panLatLng)
+        myMap.setZoom(12)
       }
     });
   })
