@@ -58,7 +58,7 @@
           strokeWeight: 2,
           fillColor: "#4205fa",
           fillOpacity: 0.35,
-          myMap,
+          map: myMap,
           center: middleLatLng,
           radius: 500,
         });
