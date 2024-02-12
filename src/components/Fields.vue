@@ -76,8 +76,16 @@
             autocompleteField1.value = new Autocomplete(document.getElementById('firstFieldInput'), {
                 componentRestrictions: { country }
             })
+            google.maps.event.addListener(autocompleteField1.value, 'place_changed', () => {
+                if (!autocompleteField1.value.getPlace()) return
+                firstFieldInput.value = autocompleteField1.value.getPlace().formatted_address
+            })
             autocompleteField2.value = new Autocomplete(document.getElementById('secondFieldInput'), {
                 componentRestrictions: { country }
+            })
+            google.maps.event.addListener(autocompleteField2.value, 'place_changed', () => {
+                if (!autocompleteField2.value.getPlace()) return
+                secondFieldInput.value = autocompleteField2.value.getPlace().formatted_address
             })
         })
     })
