@@ -19,7 +19,8 @@ export const getMiddleSearch = async (location, types) => {
             }
         })
     });
-    return await res.json();
+    const placesResult = await res.json()
+    return placesResult.places
 };
 
 export const fetchPlace = async (query) => {
