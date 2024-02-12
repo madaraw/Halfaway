@@ -6,10 +6,18 @@
 
 
 <script setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, watch, computed } from 'vue'
   import { Loader } from "@googlemaps/js-api-loader"
+  import { useNearbyInfosStore } from '../stores/nearbyInfos'
 
   const props = defineProps(['center'])
+  const nearbyInfosStore = useNearbyInfosStore()
+  const nearbyInfos = computed(() => nearbyInfosStore.nearbyInfo)
+  watch(nearbyInfos, (infos) => {
+    infos.forEach(info => {
+      createMarker({ lat: info.location.latitude, lng: info.location.longitude })
+    });
+  })
   const map = ref(null)
   const placeMarkers = (places, middleLatLng) => {
     createMarker(middleLatLng, true)
