@@ -67,7 +67,7 @@
       }
       panTheMap = (panLatLng) => {
         myMap.panTo(panLatLng)
-        myMap.setZoom(12)
+        myMap.setZoom(14)
       }
     });
   })
