@@ -4,7 +4,7 @@ export const getMiddleSearch = async (location, types) => {
         headers: {
             'Content-Type': 'application/json',
             'X-Goog-Api-Key': import.meta.env.VITE_GOOGLE_API_KEY,
-            'X-Goog-FieldMask': '*'
+            'X-Goog-FieldMask': 'places.displayName,places.location,places.formattedAddress,places.rating,places.currentOpeningHours'
         },
         body: JSON.stringify({
             'includedTypes': types,
