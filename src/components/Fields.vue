@@ -19,6 +19,10 @@
                 <label for="restaurants">restaurants</label>
                 <input :disabled="restaurantsDisabled" v-model="restaurants" type="checkbox" id="restaurants">
             </div>
+            <div class="flex items-center space-x-1">
+                <label for="searchRange">Search range (m):</label>
+                <input v-model="searchRange" min="50" max="100" step="10" type="range" id="searchRange">
+            </div>
         </div>
         <button class="py-1 px-2 border-2 border-black rounded-md" @click="gettheplace">Check</button>
     </div>
@@ -27,15 +31,18 @@
 <script setup>
     import { computed, onMounted, ref, watch } from 'vue'
     import { Loader } from "@googlemaps/js-api-loader"
+    import { useNearbyInfosStore } from '../stores/nearbyInfos';
 
     const firstFieldInput = ref('')
     const secondFieldInput = ref('')
+    const searchRange = ref(50)
     const coffeeShops = ref(true)
     const restaurants = ref(false)
     const autocompleteField1 = ref(null)
     const autocompleteField2 = ref(null)
     const props = defineProps(["country"])
     const emit = defineEmits(["sendPlaces"])
+    const nearbyInfosStore = useNearbyInfosStore()
 
     const coffeeShopsDisabled = computed(() => {
         if (!restaurants.value)
@@ -66,6 +73,9 @@
         emit('sendPlaces', payload)
     }
     onMounted(() => {
+        document.getElementById("searchRange").addEventListener("change", () => {
+            nearbyInfosStore.range = searchRange.value * 10
+        })
         let country = props.country.toLowerCase()
         const loader = new Loader({
             apiKey: import.meta.env.VITE_GOOGLE_API_KEY,

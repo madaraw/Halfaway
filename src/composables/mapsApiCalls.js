@@ -1,4 +1,4 @@
-export const getMiddleSearch = async (location, types) => {
+export const getMiddleSearch = async (location, types, range) => {
     const res = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
         method: 'POST',
         headers: {
@@ -14,7 +14,7 @@ export const getMiddleSearch = async (location, types) => {
                         'latitude': location.lat,
                         'longitude': location.lng
                     },
-                    'radius': 500
+                    'radius': range
                 }
             }
         })
