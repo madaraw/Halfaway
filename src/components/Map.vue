@@ -15,12 +15,31 @@
   const nearbyInfos = computed(() => nearbyInfosStore.nearbyInfo)
   watch(nearbyInfos, (infos) => {
     infos.forEach(info => {
-      createMarker({ lat: info.location.latitude, lng: info.location.longitude })
+      let markerParams
+      if (info.primaryType == "coffee_shop" || info.primaryType == "cafe")
+        markerParams = {
+          background: "#fa0542",
+          borderColor: "#af032e",
+          glyphColor: "#af032e"
+        }
+      else
+        markerParams = {
+          background: "#05fabd",
+          borderColor: "#03af84",
+          glyphColor: "#03af84"
+        }
+      markerParams.scale = 0.8
+      createMarker({ lat: info.location.latitude, lng: info.location.longitude }, markerParams)
     });
   })
   const map = ref(null)
   const placeMarkers = (places, middleLatLng) => {
-    createMarker(middleLatLng, true)
+    const markerParams = {
+      background: "#0542fa",
+      borderColor: "#4205fa",
+      glyphColor: "#4205fa"
+    }
+    createMarker(middleLatLng, markerParams)
     createCircle(middleLatLng)
     panTheMap(middleLatLng)
     createMarker(places.firstField.geometry ? places.firstField.geometry.location.toJSON() : { lat: places.firstField.location.latitude, lng: places.firstField.location.longitude })
@@ -46,13 +65,11 @@
         mapId: import.meta.env.VITE_GOOGLE_MAP_ID
       });
       map.value = myMap
-      createMarker = (position, middleMap = false) => {
-        let pinBackground = new PinElement({
-          background: "#0542fa",
-          borderColor: "#4205fa",
-          glyphColor: "#4205fa"
-        })
-        return middleMap ? new AdvancedMarkerElement({
+      createMarker = (position, customParams = null) => {
+        let pinBackground
+        if (customParams)
+          pinBackground = new PinElement(customParams)
+        return customParams ? new AdvancedMarkerElement({
           position,
           content: pinBackground.element,
           map: myMap,
