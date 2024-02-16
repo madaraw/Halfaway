@@ -70,7 +70,7 @@
           fillOpacity: 0.35,
           map: myMap,
           center: middleLatLng,
-          radius: 500,
+          radius: nearbyInfosStore.range,
         });
       }
       panTheMap = (panLatLng) => {
