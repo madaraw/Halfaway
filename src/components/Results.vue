@@ -1,6 +1,8 @@
 <template>
     <div v-if="nearbyInfos" v-for="place in nearbyInfos" :key="place.id">
-        <h1>{{ place.displayName.text }}</h1><span>{{ place.rating }}</span>
+        <a :href="place.googleMapsUri" target="_blank">
+            <h1>{{ place.displayName.text }}</h1>
+        </a><span>{{ place.rating }}</span>
         <p v-if="place.currentOpeningHours">open? {{ place.currentOpeningHours.openNow ? "yes" : "no" }}</p>
     </div>
 </template>
