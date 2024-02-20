@@ -7,7 +7,7 @@ export const getMiddleSearch = async (location, types, range) => {
             'X-Goog-FieldMask': 'places.displayName,places.location,places.formattedAddress,places.rating,places.currentOpeningHours,places.googleMapsUri,places.primaryType'
         },
         body: JSON.stringify({
-            'includedTypes': types,
+            'includedPrimaryTypes': types,
             'locationRestriction': {
                 'circle': {
                     'center': {
