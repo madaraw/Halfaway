@@ -3,6 +3,7 @@
     import { useMapStore } from '../stores/map';
     import { computed, onMounted, ref, watch } from 'vue';
     import { fetchPlace, getIpGeo } from '../composables/mapsApiCalls';
+    import { formatLatLng } from '../composables/misc';
     import Fields from './Fields.vue'
     import Map from './Map.vue'
     import Results from './Results.vue'
